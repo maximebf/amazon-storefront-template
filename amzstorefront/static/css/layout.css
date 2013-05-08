@@ -1,0 +1,51 @@
+
+body {
+  padding-top: 40px;
+}
+
+.modal-backdrop {
+  opacity: 0.6;
+  filter: alpha(opacity=60);
+}
+.modal {
+  border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+/* --------------------------------------------- */
+
+#header {
+  padding: 38px;
+  margin-bottom: 30px;
+}
+
+#footer {
+  color: #9a9a9a;
+  padding-bottom: 20px;
+  padding-top: 20px;
+  margin-top: 50px;
+  font-size: 12px;
+  line-height: 14px;
+  text-align: center;
+}
+  #footer p:first-child a {
+    margin-right: 10px;
+  }
+  #footer p {
+    margin-bottom: 4px;
+  }
+
+/* --------------------------------------------- */
+
+#content {
+  position: relative;
+  min-height: 400px;
+}
+
+
+/* --------------------------------------------- */
+
+@media (max-width: 979px) {
+  body {
+    padding-top: 0;
+  }
+}

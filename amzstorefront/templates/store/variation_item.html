@@ -1,0 +1,8 @@
+<li>
+  <a href="{{ url_for('.add_to_cart') }}" data-asin="{{ v.ASIN }}" data-id="{{ v.id }}" class="add-to-cart clearfix" 
+    title="{{ v.variation_name }}" {% if v.image_url %}data-imageurl="{{ v.image_url }}"{% endif %}>
+    <span class="var-thumb"><img src="{% if v.thumb_url %}{{ v.thumb_url }}{% else %}{{ url_for('static', filename='img/unknown.png') }}{% endif %}" alt="Image of {{ v.name }}" /></span>
+    <span class="var-price">{{ v.formated_price }}</span>
+    <span class="var-name">{{ v.build_variation_name(excluded_dimension) if excluded_dimension else v.variation_name }}</span>
+   </a>
+</li>

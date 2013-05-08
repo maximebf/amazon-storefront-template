@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% block head %}
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/store.css') }}" />
+  <script type="text/javascript" src="{{ url_for('static', filename='js/store.js') }}"></script>
+{% endblock %}
+{% block sidebar %}
+  <div id="cart">
+    <div class="header">
+      <i class="icon icon-shopping-cart"></i> cart
+    </div>
+    <div class="body clearfix">
+      <p>
+        Loading cart...
+      </p>
+    </div>
+  </div>
+  <div id="cart-overlay"></div>
+{% endblock %}

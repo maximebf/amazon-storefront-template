@@ -1,0 +1,13 @@
+<div class="category" id="{{ category.slug }}">
+  <h2><a href="{{ url_for('.show_category', slug=category.slug) }}">{{ category.name }}</a></h2>
+  {% if category.description %}
+      <p class="help-text">
+        {{ category.description }}
+      </p>
+  {% endif %}
+  <ul class="products products-{{ category.thumb_size }} clearfix">
+    {% for product in category.products %}
+      {% include "store/category_item.html" %}
+    {% endfor %}
+  </ul>
+</div>

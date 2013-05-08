@@ -1,0 +1,50 @@
+
+{% macro product_item(asin, brand, name, price, image_url, amazon_url, gender='all') -%}
+    <li data-asin="{{ asin }}" data-gender="{{ gender }}">
+      <img src="{{ image_url }}" />
+      <span class="brand">{{ brand }}</span>
+      <span class="name">{{ name }}</span>
+      <span class="rating"><img src="{{ url_for('static', filename='img/stars.gif') }}" /></span>
+      <div class="price">
+        <span class="value">{{ price }}</span>
+        <a href="javascript:" class="buy-link btn btn-mini"><i class="icon-shopping-cart"></i> Add</a>
+      </div>
+      <a href="{{ amazon_url }}">amazon</a>
+    </li>
+{%- endmacro %}
+
+
+{% macro form_field(field) -%}
+    <div class="control-group {% if field.errors %}error{% endif %}">
+        {% if field.type != 'BooleanField' %}
+            <label for="{{ field.id }}" class="control-label">
+                {{ field.label.text }}{% if field.flags.required %} *{% endif %}:
+            </label>
+        {% endif %}
+        <div class="controls">
+            {% set class_ = kwargs.pop('class_', '') %}
+            {% if field.flags.required %}
+                {% set class_ = class_ + ' required' %}
+            {% endif %}
+            {% if field.type == 'BooleanField' %}
+                <label class="checkbox">
+                    {{ field(class_=class_, **kwargs) }}
+                    {{ field.label.text }}
+                </label>
+            {% else %}
+                {% if field.type in ('TextField', 'TextAreaField', 'MarkdownField') %}
+                    {% set class_ = class_ + ' input-xlarge span5' %}
+                {% elif field.type == 'FileField' %}
+                    {% set class_ = class_ + ' input-file' %}
+                {% endif %}
+                {{ field(class_=class_, **kwargs) }}
+            {% endif %}
+            {% if field.errors %}
+                <span class="error help-inline">{{ field.errors|join(', ') }}</span>
+            {% endif %}
+            {% if field.description %}
+                <p class="help-block">{{ field.description|safe }}</p>
+            {% endif %}
+        </div>
+    </div>
+{%- endmacro %}

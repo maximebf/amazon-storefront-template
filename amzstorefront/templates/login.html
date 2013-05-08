@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% from 'helpers.html' import form_field %}
+{% block content %}
+<form action="{{ url_for('.user_login') }}" method="post">
+  {{ form.csrf_token }}
+  {{ form_field(form.username) }}
+  {{ form_field(form.password) }}
+  <div class="form-actions">
+    <input type="submit" value="Login" class="btn btn-primary" />
+  </div>
+</form>
+{% endblock %}

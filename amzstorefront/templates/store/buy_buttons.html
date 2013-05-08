@@ -1,0 +1,35 @@
+<div class="buy-buttons">
+  {% if product.variations|length > 1 %}
+    <div class="btn-group">
+      <a class="btn btn-{{ btn_size or 'mini' }} dropdown-toggle" data-toggle="dropdown" href="#" title="Add to cart">
+        <i class="icon-shopping-cart"></i> {{ 'Add to cart' if btn_text_long else 'Add' }} <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu">
+        {% if product.variation_matrix is mapping %}
+          {% set excluded_dimension = product.variation_main_dimension %}
+          {% for dim_name, variations in product.variation_matrix.items() %}
+            <li class="dropdown-submenu">
+              <a href="#">{{ dim_name }}</a>
+              <ul class="dropdown-menu">
+                {% for v in variations %}
+                  {% include 'store/variation_item.html' %}
+                {% endfor %}
+              </ul>
+            </li>
+          {% endfor %}
+        {% else %}
+          {% for v in product.variations %}
+            {% include 'store/variation_item.html' %}
+          {% endfor %}
+        {% endif %}
+      </ul>
+    </div>
+  {% else %}
+    <a href="{{ url_for('.add_to_cart') }}" class="add-to-cart btn btn-{{ btn_size or 'mini' }}" title="Add to cart"
+      data-asin="{{ product.variations[0].ASIN if product.variations else product.ASIN }}" 
+      data-id="{{ product.variations[0].id if product.variations else product.id }}">
+        <i class="icon-shopping-cart"></i> {{ 'Add to cart' if btn_text_long else 'Add' }}</a>
+  {% endif %}
+  <a href="{{ product.details_url }}" class="buy btn btn-{{ btn_size or 'mini' }} {% if btn_colorize %}btn-success{% endif %}" title="Buy now on Amazon.com">
+    <i class="{% if btn_colorize %}icon-white{% endif %} icon-circle-arrow-right"></i> {{ 'Buy now' if btn_text_long else 'Buy' }}</a>
+</div>

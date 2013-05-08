@@ -1,0 +1,12 @@
+<li id="product-{{ product.ASIN }}" data-asin="{{ product.ASIN }}" class="{% if product.out_of_stock %}outofstock{% endif %}">
+  <a name="{{ product.ASIN }}" />
+  <a href="{{ url_for('.show_product', product_id=product.id, slug=product.slug) }}" title="{{ product.fullname }}">
+    <img src="{{ product.thumb_url }}" class="thumb" alt="Image of {{ product.fullname }}" />
+    <span class="brand">{{ product.brand }}</span>
+    <span class="name">{{ product.name }}</span>
+    <span class="price">{{ product.formated_price }}</span>
+  </a>
+  {% if not product.out_of_stock %}
+    {% include "store/buy_buttons.html" %}
+  {% endif %}
+</li>
