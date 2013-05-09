@@ -4,6 +4,9 @@ import oembed
 import hashlib
 
 
+__all__ = ['redis', 'oembed_consumer', 'hash_with_salt', 'slugify']
+
+
 redis = StrictRedis()
 
 

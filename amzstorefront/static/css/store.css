@@ -30,12 +30,12 @@
 
 .categories .category {
   border-top: 2px solid #DDD;
-  padding-top: 36px;
+  padding-top: 7px;
   padding-bottom: 35px;
 }
 
 .category h2 {
-  margin-bottom: 6px;
+  margin-bottom: 30px;
 }
   .category h2 a {
     color: #333;

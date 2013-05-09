@@ -21,6 +21,16 @@ register_page('/contact', 'pages/contact.html')
 register_page('/affiliates', 'pages/affiliates.html')
 
 
+login_manager = login.LoginManager()
+login_manager.login_view = "login"
+login_manager.setup_app(app)
+
+
+@login_manager.user_loader
+def load_user(id):
+    return User()
+
+
 class LoginForm(wtf.Form):
     username = wtf.TextField(validators=[wtf.required()])
     password = wtf.PasswordField(validators=[wtf.required()])

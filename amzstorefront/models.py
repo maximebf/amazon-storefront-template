@@ -1,4 +1,5 @@
-from amzstorefront import db
+from amzstorefront import app
+from flask_sqlalchemy import SQLAlchemy
 from flask.ext.login import UserMixin
 from sqlalchemy import func
 from werkzeug import cached_property
@@ -7,6 +8,9 @@ import datetime
 
 
 __all__ = ('db', 'User', 'Category', 'Product')
+
+
+db = SQLAlchemy(app)
 
 
 class User(UserMixin):
@@ -39,9 +43,10 @@ class Category(db.Model):
     def find_by_name(cls, name):
         return Category.query.filter_by(name=name).first()
 
-    def __init__(self, name):
-        self.name = name
-        self.slug = name.lower()
+    def __init__(self, name=None):
+        if not name is None:
+            self.name = name
+            self.slug = name.lower()
 
     def __repr__(self):
         return self.name
@@ -91,7 +96,7 @@ class Product(db.Model):
     def find_by_asin(cls, ASIN):
         return Product.query.filter_by(ASIN=ASIN).first()
 
-    def __init__(self, ASIN):
+    def __init__(self, ASIN=None):
         self.ASIN = ASIN
         self.overrided_fields = set()
 

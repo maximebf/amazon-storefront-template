@@ -1,4 +1,4 @@
-# Amazon Storefront Template
+# Amazon Storefront Template
 
 An almost ready-to-use Python [Flask](http://flask.pocoo.org/) application to create your own 
 online shop on top of the [Amazon Affiliates](https://affiliate-program.amazon.com/) program
@@ -13,6 +13,7 @@ Features:
  - Optimized for caching engine (works great behind [Varnish](https://www.varnish-cache.org/))
  - Small web admin and commands from the terminal
  - Uses [Celery](http://www.celeryproject.org/) for background tasks
+ - Built-in affiliates program
 
 ## Installation
 
@@ -59,3 +60,18 @@ so that everything can be cached. Use this simple rule to ensure the cart is not
             unset req.http.Cookie;
         }
     }
+
+## Built-in affiliates program
+
+You can motivate people to post links to your website by offering an affiliates program.
+It is built on top of Amazon Affiliates so your affiliates will need an 
+Amazon Affiliates account.
+
+Activate the affiliates program in the settings, switching `ALLOW_AFFILIATES` to `True`.
+
+Affiliates can then link to your product pages with an `afftag` parameter containing
+their Amazon Affiliates tag. Eg: http://example.com/p/1-table-top?afftag=myamztag-30
+
+If the visitor buys the content of its cart in the next 48 hours (set your own value
+in the settings using `AFFILIATE_TAG_TTL`), the Amazon tag of your affiliate will be
+used, meaning he gets the 6% commission.

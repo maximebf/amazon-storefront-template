@@ -20,6 +20,8 @@ def setup_request_globals():
         del(session['afftag_expiry'])
         if not g.cart.created:
             session.permanent = False
+            
+    g.categories = Category.query.all()
 
 
 @blueprint.after_request
@@ -53,9 +55,11 @@ def show_product(product_id, slug):
         return abort(404)
 
     if current_app.config['ALLOW_AFFILIATES'] and 'afftag' in request.args:
-        session['afftag'] = request.args['afftag']
-        session['afftag_expiry'] = time.time() + current_app.config['AFFILIATE_TAG_TTL']
-        session.permanent = True
+        allowed_tags = current_app.config['ALLOWED_AFFILIATE_TAGS']
+        if allowed_tags is None or request.args['afftag'] in allowed_tags:
+            session['afftag'] = request.args['afftag']
+            session['afftag_expiry'] = time.time() + current_app.config['AFFILIATE_TAG_TTL']
+            session.permanent = True
 
     g.active_category_id = product.category_id
     return render_template('store/product_page.html', product=product)

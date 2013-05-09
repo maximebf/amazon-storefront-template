@@ -1,5 +1,6 @@
 from flask.ext.admin import Admin, AdminIndexView, BaseView, expose
 from flask.ext.admin.contrib.sqlamodel import ModelView
+from flask.ext.admin.contrib.fileadmin import FileAdmin
 from flask.ext import wtf
 from flask.ext.login import current_user
 from amzstorefront.models import *
@@ -43,7 +44,21 @@ class CategoriesView(AuthenticatedView, ModelView):
         super(CategoriesView, self).__init__(Category, session, **kwargs)
 
 
+class TemplatesView(AuthenticatedView, FileAdmin):
+    def __init__(self):
+        path = os.path.join(os.path.dirname(__file__), '..', 'templates')
+        super(TemplatesView, self).__init__(path, '/', name='Templates')
+
+
+class AssetsView(AuthenticatedView, FileAdmin):
+    def __init__(self):
+        path = os.path.join(os.path.dirname(__file__), '..', 'static')
+        super(AssetsView, self).__init__(path, '/static/', name='Assets')
+
+
 def create_admin(app):
     admin = Admin(app, name='Admin', index_view=IndexView())
     admin.add_view(CategoriesView(db.session))
     admin.add_view(ProductsView(db.session))
+    admin.add_view(TemplatesView())
+    admin.add_view(AssetsView())

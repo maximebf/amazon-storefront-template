@@ -14,8 +14,9 @@ class Config(object):
     AMAZON_ASSOC_TAG = 'YOUR ASSOC TAG'
     AMAZON_LOCALE = 'us'
 
-    ALLOW_AFFILIATES = True
+    ALLOW_AFFILIATES = False
     AFFILIATE_TAG_TTL = 86400 * 2
+    ALLOWED_AFFILIATE_TAGS = None # None = all, list with affiliate tags = whitelist
     CART_TTL = 3600
 
     BROKER_URL = 'redis://localhost:6379/0'
