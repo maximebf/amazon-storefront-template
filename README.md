@@ -23,8 +23,8 @@ Features:
 
 ## Getting started
 
- 1. Signup on Amazon Affiliates.
- 2. Signup on AWS
+ 1. Signup on [Amazon Affiliates](https://affiliate-program.amazon.com).
+ 2. Signup on [AWS](http://aws.amazon.com/)
  3. Edit the *amzstorefront/settings.py* with your authentification details
  4. Add categories and products
  5. Customize the templates and CSS
