@@ -30,7 +30,7 @@ Features:
  5. Customize the templates and CSS
  6. Run!
 
-## Adding categories and products
+## Adding categories and products
 
 To add a product you will need its ASIN which can be found
 in a product's URL or on the product's page in the Details section
@@ -41,7 +41,7 @@ From the command line:
     $ ./manage.py add_category Games
     $ ./manage.py add_product B003O6JIVE Games
 
-## Running
+## Running
 
 Running the development server is as simple as:
 
