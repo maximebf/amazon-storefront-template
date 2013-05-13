@@ -60,8 +60,9 @@ def update_product(asin):
 
 @manager.command
 def update_all_products():
-    from amzstorefront import tasks
-    tasks.sync_all.delay()
+    for p in Product.query.filter_by(parent_id=None).all():
+        amazon.update_product(p)
+    db.session.commit()
 
 
 @manager.command
