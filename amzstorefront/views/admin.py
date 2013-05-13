@@ -22,7 +22,7 @@ class ProductsView(AuthenticatedView, ModelView):
     column_sortable_list = ('id', 'brand', 'name')
     column_searchable_list = ('ASIN', 'brand', 'name')
 
-    form_columns = ('ASIN', 'visible', 'category', 'parent', 'name', 'slug', 'brand', 'name', 'description', 'image_url', 'thumb_url', 'editor_comment', 'video_review_url', 'video_review_html', 'video_review_author', 'video_review_author_url')
+    form_columns = ('ASIN', 'visible', 'category', 'name', 'slug', 'brand', 'name', 'description', 'image_url', 'thumb_url', 'editor_comment', 'video_review_url', 'video_review_html', 'video_review_author', 'video_review_author_url')
     form_overrides = dict(description=wtf.TextAreaField, editor_comment=wtf.TextAreaField, video_review_html=wtf.TextAreaField)
     form_args = dict(ASIN=dict(validators=[wtf.required()]))
 

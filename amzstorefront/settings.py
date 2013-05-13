@@ -9,7 +9,7 @@ class Config(object):
     ADMIN_PASSWORD = 'admin'
 
     AWS_KEY = 'YOUR AWS KEY' # Amazon Access Key, can be found in your AWS account under Security Credentials
-    AWS_SECRET = 'YOUR AWS SECRET' # Amazon Access Secret Key
+    AWS_SECRET = 'YOUR AWS SECRET' # Amazon Access Secret Key
     AMAZON_ASSOC_TAG = 'YOUR ASSOC TAG' # Your associates tag, can be found on your Amazon Affiliates dashboard
     AMAZON_LOCALE = 'us'
 
@@ -29,7 +29,7 @@ class Config(object):
 
 
 class ProdConfig(Config):
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///amzstorefront.db' # You should use a proper database in production
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///amzstorefront.db' # You should use a proper database in production
 
 
 class DevConfig(Config):
