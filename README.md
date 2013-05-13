@@ -19,7 +19,7 @@ Features:
 
  1. Get the source code
  2. Install dependencies using `pip install -r requirements.txt`
- 3. Create the db using `./manage.py create_db`
+ 3. Create the db using `./manage.py create_db` (uses sqlite by default)
 
 ## Getting started
 
@@ -49,6 +49,28 @@ Running the development server is as simple as:
 
 In production, you can use uWSGI and Supervisor as explained
 [here](http://maximebf.com/blog/2012/10/building-websites-in-python-with-flask).
+
+## Accessing the admin interface
+
+A built-in admin interface is provided. It is very basic for the moment.
+
+ 1. Login at http://example.com/login with the credentials specified in settings.py
+ 2. Go to http://example.com/admin
+
+## Stay in sync with Amazon
+
+Amazon requires in its ToS that products must display the last updated time of
+the price and that your this delay stays as low as possible.
+
+Two ways to stay synchronized with Amazon:
+
+ - Using cron calling the following command: `./manage.py update_all_products`
+ - Using Celery
+
+ Using Celery will require that a worker process is running as well as a Celery
+ Beat instance. You can start a worker with an embeded beat using this command:
+
+    $ celery worker -A amzstorefront.tasks -B
 
 ## Using Varnish
 
