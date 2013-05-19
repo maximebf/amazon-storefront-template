@@ -1,0 +1,19 @@
+<div class="product-list">
+  <div class="list-header">
+    <span>Showing all in</span>
+    <h2>{{ list_title }}</h2>
+  </div>
+  {% if carousel_products %}
+    {% include "store/carousel.html" %}
+  {% endif %}
+  {% if list_description %}
+      <div class="list-description">
+        {{ list_description }}
+      </div>
+  {% endif %}
+  <ul class="products clearfix">
+    {% for product in products %}
+      {% include "store/product_list_item.html" %}
+    {% endfor %}
+  </ul>
+</div>

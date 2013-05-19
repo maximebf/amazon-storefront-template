@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block main %}
+  <div class="row-fluid">
+    <div id="content" class="span9">
+      {% include "flash_messages.html" %}
+      {% block content %}{% endblock %}
+    </div>
+    <div id="sidebar" class="span3">
+      {% block sidebar %}{% endblock %}
+    </div>
+  </div>
+{% endblock %}

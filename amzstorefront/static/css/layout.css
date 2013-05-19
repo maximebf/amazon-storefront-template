@@ -1,6 +1,5 @@
 
 body {
-  padding-top: 40px;
 }
 
 .modal-backdrop {
@@ -11,11 +10,57 @@ body {
   border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
+.btn {
+  padding: 6px 14px;
+  border: 0;
+  background: #ECF0F1;
+}
+
+.btn-mini {
+  padding: 2px 8px;
+}
+
+.btn-success {
+  background: #2ECC71;
+}
+.btn-success:hover {
+  background: #27AE60;
+}
+
 /* --------------------------------------------- */
 
 #header {
-  padding: 38px;
+  padding: 15px 0 25px 0;
 }
+  #header .container {
+    position: relative;
+  }
+  #header h1 a {
+    color: #000;
+  }
+
+#menu {
+  margin-bottom: 30px;
+}
+  #menu .navbar-inner {
+    background: #F1C40F;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+  }
+  #menu .nav>.active>a, #menu .nav>.active>a:hover, #menu .nav>.active>a:focus {
+    background: #ecaf12;
+    color: #000;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    text-shadow: none;
+  }
+  #menu .nav>li>a {
+    text-shadow: none;
+    color: #8b7109;
+  }
+  #menu .nav>li>a:hover {
+    color: #705b07;
+  }
 
 #footer {
   color: #9a9a9a;

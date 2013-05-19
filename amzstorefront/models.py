@@ -27,7 +27,6 @@ class Category(db.Model):
     slug = db.Column(db.String)
     description = db.Column(db.String)
     position = db.Column(db.Integer, default=0, nullable=False)
-    thumb_size = db.Column(db.Enum('small', 'medium', 'large', name='thumb_sizes'), default='medium')
 
     products = db.relationship('Product', backref='category')
 
@@ -85,6 +84,7 @@ class Product(db.Model):
     video_review_html = db.Column(db.String)
     video_review_author = db.Column(db.String)
     video_review_author_url = db.Column(db.String)
+    featured = db.Column(db.Boolean, default=False)
 
     parent = db.relationship('Product', backref='variations', remote_side=[id], cascade='all')
 

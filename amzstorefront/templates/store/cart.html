@@ -1,30 +1,28 @@
-{% if g.cart.created and g.cart.items|length > 0 %}
-  <div class="header">
-    <i class="icon icon-shopping-cart"></i> <strong>{{ g.cart.items|length }} item{{ 's' if g.cart.items|length > 1 else '' }}</strong> in your cart
-  </div>
-  <div class="body clearfix">
-    <table class="items">
-      {% for item in g.cart.items %}
-        <tr data-asin="{{ item.ASIN }}" data-itemid="{{ item.id }}" data-modify-url="{{ url_for('.update_cart_item', item_id=item.id) }}" {% if item.variation.image_url %}data-imageurl="{{ item.variation.image_url }}"{% endif %}>
-          <td class="name"><a href="{{ url_for('.show_product', product_id=item.product.id, slug=item.product.slug) }}" title="{{ item.variation.name }}">{{ item.product.fullname|truncate(25) }}</a></td>
-          <td class="quantity"><input type="text" value="{{ item.quantity }}" /></td>
-          <td class="price">{{ item.unit_formated_price }}</td>
-        </tr>
-      {% endfor %}
-    </table>
-  </div>
-  <div class="footer clearfix">
-    <span class="total">{{ g.cart.formated_price }}</span>
-    <a href="{{ url_for('.checkout') }}" class="checkout btn btn-success" rel="tooltip" 
-      data-placement="bottom" data-original-title="Checkout on Amazon.com"><i class="icon-lock icon-white"></i> Checkout &raquo;</a>
-  </div>
-{% else %}
-  <div class="header">
-    <i class="icon icon-shopping-cart"></i> your cart is empty
-  </div>
-  <div class="body clearfix">
-    <p>
-      Start shopping by adding products to your cart.
-    </p>
-  </div>
-{% endif %}
+<div class="status">
+  <span class="quantity"><i class="icon icon-shopping-cart"></i> {% include "store/cart_status.html" %}</span>
+  {% include "store/cart_checkout_btn.html" %}
+</div>
+<div class="collaspable">
+  {% if g.cart.created and g.cart.items|length > 0 %}
+    <div class="body clearfix">
+      <table class="items">
+        {% for item in g.cart.items %}
+          <tr data-asin="{{ item.ASIN }}" data-itemid="{{ item.id }}" data-modify-url="{{ url_for('.update_cart_item', item_id=item.id) }}" {% if item.variation.image_url %}data-imageurl="{{ item.variation.image_url }}"{% endif %}>
+            <td class="name"><a href="{{ url_for('.show_product', product_id=item.product.id, slug=item.product.slug) }}" title="{{ item.variation.name }}">{{ item.product.fullname|truncate(25) }}</a></td>
+            <td class="quantity"><input type="text" value="{{ item.quantity }}" /></td>
+            <td class="price">{{ item.unit_formated_price }}</td>
+          </tr>
+        {% endfor %}
+      </table>
+    </div>
+    <div class="footer clearfix">
+      Total <span class="total">{{ g.cart.formated_price }}</span>
+    </div>
+  {% else %}
+    <div class="body clearfix">
+      <p>
+        Start shopping by adding products to your cart.
+      </p>
+    </div>
+  {% endif %}
+</div>

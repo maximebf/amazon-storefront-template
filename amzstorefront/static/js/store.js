@@ -3,23 +3,14 @@ $(function() {
     var cart = $('#cart'),
         cart_overlay = $('#cart-overlay');
 
-    cart.affix({offset: {top: 190}});
+    //cart.affix({offset: {top: 190}});
 
     function bind_cart_events() {
+        cart.hover(
+            function() { cart.addClass('expanded'); }, 
+            function() { cart.removeClass('expanded'); }
+        );
         cart.find('.footer a').tooltip();
-        cart.find('.items tr').each(function() {
-            var self = $(this), imageurl = self.data('imageurl');
-            if (imageurl) {
-                img = new Image();
-                img.src = imageurl;
-                self.find('a').popover({
-                    trigger: 'hover',
-                    placement: 'left',
-                    content: '<img src="' + img.src + '" />',
-                    html: true
-                });
-            }
-        });
     }
 
     function update_cart(url, data, callback) {

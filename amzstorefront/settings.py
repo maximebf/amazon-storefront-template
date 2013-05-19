@@ -18,6 +18,8 @@ class Config(object):
     ALLOWED_AFFILIATE_TAGS = None # None = all, list with affiliate tags = whitelist
     CART_TTL = 3600 # Duration of the cache time for the cart
 
+    SHOW_BUY_NOW_BTN = True # Show a Buy Now button with a direct link to Amazon
+
     BROKER_URL = 'redis://localhost:6379/0'
     CELERY_TIMEZONE = 'UTC'
     CELERYBEAT_SCHEDULE = {

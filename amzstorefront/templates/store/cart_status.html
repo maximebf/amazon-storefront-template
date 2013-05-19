@@ -1,0 +1,6 @@
+{% if g.cart.created and g.cart.items|length > 0 %}
+  <strong>{{ g.cart.items|length }} item{{ 's' if g.cart.items|length > 1 else '' }}</strong> in your cart
+  ({{ g.cart.formated_price }})
+{% else %}
+  your cart is empty
+{% endif %}

@@ -30,6 +30,8 @@
       data-id="{{ product.variations[0].id if product.variations else product.id }}">
         <i class="icon-shopping-cart"></i> {{ 'Add to cart' if btn_text_long else 'Add' }}</a>
   {% endif %}
-  <a href="{{ product.details_url }}" class="buy btn btn-{{ btn_size or 'mini' }} {% if btn_colorize %}btn-success{% endif %}" title="Buy now on Amazon.com">
-    <i class="{% if btn_colorize %}icon-white{% endif %} icon-circle-arrow-right"></i> {{ 'Buy now' if btn_text_long else 'Buy' }}</a>
+  {% if config['SHOW_BUY_NOW_BTN'] %}
+    <a href="{{ product.details_url }}" class="buy btn btn-{{ btn_size or 'mini' }} {% if btn_colorize %}btn-success{% endif %}" title="Buy now on Amazon.com">
+      <i class="{% if btn_colorize %}icon-white{% endif %} icon-circle-arrow-right"></i> {{ 'Buy now' if btn_text_long else 'Buy' }}</a>
+    {% endif %}
 </div>

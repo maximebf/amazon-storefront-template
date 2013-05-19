@@ -1,19 +1,4 @@
 
-{% macro product_item(asin, brand, name, price, image_url, amazon_url, gender='all') -%}
-    <li data-asin="{{ asin }}" data-gender="{{ gender }}">
-      <img src="{{ image_url }}" />
-      <span class="brand">{{ brand }}</span>
-      <span class="name">{{ name }}</span>
-      <span class="rating"><img src="{{ url_for('static', filename='img/stars.gif') }}" /></span>
-      <div class="price">
-        <span class="value">{{ price }}</span>
-        <a href="javascript:" class="buy-link btn btn-mini"><i class="icon-shopping-cart"></i> Add</a>
-      </div>
-      <a href="{{ amazon_url }}">amazon</a>
-    </li>
-{%- endmacro %}
-
-
 {% macro form_field(field) -%}
     <div class="control-group {% if field.errors %}error{% endif %}">
         {% if field.type != 'BooleanField' %}

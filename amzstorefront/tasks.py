@@ -16,7 +16,7 @@ def sync_all():
 @celery.task(ignore_result=True)
 def sync_product(id):
     product = Product.query.filter_by(id=id).one()
-    amazon.update_product(product)
+    amazon.populate_product(product)
     db.session.commit()
 
 

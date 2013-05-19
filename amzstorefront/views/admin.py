@@ -36,7 +36,7 @@ class ProductsView(AuthenticatedView, ModelView):
 class CategoriesView(AuthenticatedView, ModelView):
 
     column_list = ('name', 'slug')
-    form_columns = ('name', 'slug', 'description', 'position', 'thumb_size')
+    form_columns = ('name', 'slug', 'description', 'position')
     form_overrides = dict(description=wtf.TextAreaField)
     form_args = dict(name=dict(validators=[wtf.required()]), slug=dict(validators=[wtf.required()]))
 
@@ -47,7 +47,7 @@ class CategoriesView(AuthenticatedView, ModelView):
 class TemplatesView(AuthenticatedView, FileAdmin):
     def __init__(self):
         path = os.path.join(os.path.dirname(__file__), '..', 'templates')
-        super(TemplatesView, self).__init__(path, '/', name='Templates')
+        super(TemplatesView, self).__init__(path, '/templates/', name='Templates')
 
 
 class AssetsView(AuthenticatedView, FileAdmin):

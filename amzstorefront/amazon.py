@@ -18,6 +18,9 @@ api = ProductAdvertisingAPI(app.config['AWS_KEY'],
 
 
 def find_item(asin, response_group='Large', parent_only=False, assoc_tag=None):
+    """Finds an Amazon product using its ASIN and returns the speicied response group
+    If parent_only=True and the current ASIN has a parent, the parent will be returned
+    """
     assoc_tag = assoc_tag or app.config['AMAZON_ASSOC_TAG']
     app.logger.debug('Fetching %s for %s' % (response_group, asin))
     try:
@@ -33,15 +36,19 @@ def find_item(asin, response_group='Large', parent_only=False, assoc_tag=None):
 
 
 def find_product(asin, parent_only=True, assoc_tag=None):
+    """Returns a Product object based on an Amazon ASIN
+    """
     item = find_item(asin, parent_only=parent_only, assoc_tag=assoc_tag)
     if item is None:
         return
     product = Product(item.ASIN.pyval)
-    update_product(product, item, assoc_tag)
+    populate_product(product, item, assoc_tag)
     return product
 
 
-def update_product(product, item=None, assoc_tag=None):
+def populate_product(product, item=None, assoc_tag=None):
+    """Populates a Product object using data returns from Amazon API
+    """
     product.last_refreshed_at = datetime.datetime.now()
 
     if item is None:
@@ -53,7 +60,8 @@ def update_product(product, item=None, assoc_tag=None):
     popuplate_product_fields(product, item)
 
     if item.OfferSummary.TotalNew == 0:
-        update_variations(product, assoc_tag)
+        # No offer summary means it's a parent
+        populate_variations(product, assoc_tag)
         if product.formated_price == '$-':
             populate_product_price(product, find_item(product.ASIN, 'VariationSummary'))
     else:
@@ -63,6 +71,8 @@ def update_product(product, item=None, assoc_tag=None):
 
 
 def popuplate_product_fields(product, item):
+    """Populates all the common fields of a Product object using data from the API
+    """
     app.logger.debug('Populating fields for %s' % product.ASIN)
     if not product.is_field_overrided('name'):
         product.name = item.ItemAttributes.Title.pyval
@@ -103,15 +113,19 @@ def popuplate_product_fields(product, item):
 
 
 def populate_product_price(product, item):
+    """Populate the price and availability of a Product object using data from the API
+    """
     app.logger.debug('Populating price for %s' % product.ASIN)
     product.price = 0
     product.currency = 'USD'
     product.availability = 'Unknown'
     product.out_of_stock = False
     if hasattr(item, 'OfferSummary') and hasattr(item, 'Offers') and int(item.OfferSummary.TotalNew.pyval) > 0:
+        # Tries to get the best price from the list of offers
         offer = find_best_offer(item.Offers)
         if offer is None:
             if hasattr(item.ItemAttributes, 'ListPrice'):
+                # Fallback to ListPrice
                 product.formated_price = item.ItemAttributes.ListPrice.FormattedPrice.pyval
                 product.price = item.ItemAttributes.ListPrice.Amount.pyval
                 product.currency = item.ItemAttributes.ListPrice.CurrencyCode.pyval
@@ -124,9 +138,11 @@ def populate_product_price(product, item):
             if hasattr(offer, 'Availability'):
                 product.availability = offer.Availability.pyval
     elif hasattr(item, 'VariationSummary'):
+        # If the product has variations, display a price range
         product.formated_price = "%s-%s" % (item.VariationSummary.LowestPrice.FormattedPrice.pyval, 
             item.VariationSummary.HighestPrice.FormattedPrice.pyval)
     elif hasattr(item.ItemAttributes, 'ListPrice'):
+        # Fallback to ListPrice
         product.formated_price = item.ItemAttributes.ListPrice.FormattedPrice.pyval
         product.price = item.ItemAttributes.ListPrice.Amount.pyval
         product.currency = item.ItemAttributes.ListPrice.CurrencyCode.pyval
@@ -136,10 +152,13 @@ def populate_product_price(product, item):
 
 
 def find_best_offer(offers):
+    """Finds the best offer in an Offers response group from the API
+    """
     best_price = None
     best_offer = None
     for offer in offers.Offer:
         if offer.OfferAttributes.Condition.pyval != 'New':
+            # Only keeping new products
             continue
         if offer.OfferListing.Price.FormattedPrice.pyval == 'Too low to display':
             continue
@@ -149,7 +168,9 @@ def find_best_offer(offers):
     return best_offer
 
 
-def update_variations(product, assoc_tag=None):
+def populate_variations(product, assoc_tag=None):
+    """Retreives the variations and populates and Product object with them
+    """
     vm = find_item(product.ASIN, 'VariationMatrix', assoc_tag=assoc_tag)
     product.out_of_stock = False
     
@@ -164,6 +185,7 @@ def update_variations(product, assoc_tag=None):
     for vd in vm.Variations.VariationDimensions.VariationDimension:
         product.variation_dimensions.append(vd.pyval)
     if not product.is_field_overrided('variation_main_dimension'):
+        # Amazon never orders dimensions by order of importance, small tricks to find the main one
         product.variation_main_dimension = None
         if 'Size' in product.variation_dimensions:
             product.variation_main_dimension = 'Size'
@@ -174,13 +196,14 @@ def update_variations(product, assoc_tag=None):
 
     asins = []
     for vi in vm.Variations.Item:
+        # Importing variations as Product object
         asins.append(vi.ASIN.pyval)
         v = product.get_variation(vi.ASIN.pyval)
         if v is None:
             v = find_product(vi.ASIN.pyval, parent_only=False, assoc_tag=assoc_tag)
             product.variations.append(v)
         else:
-            update_product(v, assoc_tag=assoc_tag)
+            populate_product(v, assoc_tag=assoc_tag)
         v.variation_attrs = convert_variation_attributes_to_dict(vi.VariationAttributes)
 
     for v in product.variations:
@@ -224,6 +247,8 @@ def update_variations(product, assoc_tag=None):
 
 
 def convert_variation_attributes_to_dict(vattrs):
+    """Converts the variation attributes XML to a dict
+    """
     attrs = {}
     for va in vattrs.VariationAttribute:
         attrs[va.Name.pyval] = va.Value.pyval if hasattr(va, 'Value') else 'Unknown'
@@ -231,14 +256,20 @@ def convert_variation_attributes_to_dict(vattrs):
 
 
 class Cart(object):
+    """Represents a cart from Amazon
+    All operations are executed immediatly and the object is updated after each of them.
+    However the object can be persisted and loaded without the need to query Amazon.
+    Querying amazon to load the cart can take some times so it's good to use redis
+    """
+    
     @classmethod
     def load(cls, id, hmac, assoc_tag=None):
-        cart_data = redis.get("%s:%s" % (id, hmac))
-        if cart_data:
-            try:
+        try:
+            cart_data = redis.get("%s:%s" % (id, hmac))
+            if cart_data:
                 return pickle.loads(cart_data)
-            except:
-                pass
+        except:
+            app.logger.error('Failed loading cart from cache')
         
         c = cls(id, hmac, assoc_tag)
         c.modified = True # force persist
@@ -353,9 +384,12 @@ class Cart(object):
         self._update_cart_from_response(r)
         self.modified = True
 
-    def persist(self):
-        redis.setex(self.fullid, app.config['CART_TTL'], pickle.dumps(self))
-        self.modified = False
+    def persist(self, ttl=3600):
+        try:
+            redis.setex(self.fullid, ttl, pickle.dumps(self))
+            self.modified = False
+        except:
+            app.logger.error('Failed persisting cart')
 
     def __getstate__(self):
         if not self.loaded and self.created:

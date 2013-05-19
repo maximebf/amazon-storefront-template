@@ -1,51 +1,54 @@
-<div class="product row-fluid" data-id="{{ product.id }}" data-asin="{{ product.ASIN }}">
-  <div class="image span2">
-    <img src="{{ product.image_url }}" alt="Picture of {{ product.fullname }}" />
-  </div>
-  <div class="product-content span10">
-    <span class="brand">{{ product.brand }}</span>
-    <span class="name">{{ product.name }}</span>
-    <div class="price">
-      <span class="value">{{ product.formated_price }}</span>
-      <span class="notice">Last updated {{ product.formated_last_refreshed_at }}</span>
+{% extends "store/layout.html" %}
+{% block content %}
+  <div class="product row-fluid" data-id="{{ product.id }}" data-asin="{{ product.ASIN }}">
+    <div class="image span2">
+      <img src="{{ product.image_url }}" alt="Picture of {{ product.fullname }}" />
     </div>
-    {% if product.editor_comment %}
-      <div class="editor-comment">
-        <strong>Editor's comment</strong>
-        <p>{{ product.editor_comment }}</p>
+    <div class="product-content span10">
+      <span class="brand">{{ product.brand }}</span>
+      <span class="name">{{ product.name }}</span>
+      <div class="price">
+        <span class="value">{{ product.formated_price }}</span>
+        <span class="notice">Last updated {{ product.formated_last_refreshed_at }}</span>
       </div>
-    {% endif %}
-    {% if product.description %}
-      <div class="desc">{{ product.description|safe }}</div>
-    {% endif %}
-    <div class="amazon">
-      <a href="{{ product.details_url }}">View on Amazon.com &raquo;</a>
-    </div>
-    {% if not product.out_of_stock %}
-      {% if product.formated_variation_dimensions %}
-        <div class="dimensions">{{ product.formated_variation_dimensions }}</div>
+      {% if product.editor_comment %}
+        <div class="editor-comment">
+          <strong>Editor's comment</strong>
+          <p>{{ product.editor_comment }}</p>
+        </div>
       {% endif %}
-      {% set btn_size = 'default' %}
-      {% set btn_text_long = True %}
-      {% set btn_colorize = True %}
-      {% include "store/buy_buttons.html" %}
-    {% endif %}
-    {% if product.video_review_url %}
-      <div class="video">
-        <strong>
-          Video review
-          {% if product.video_review_author %}
-            by {% if product.video_review_author_url %}<a href="{{ product.video_review_author_url }}">{% endif %}
-            {{ product.video_review_author }}{% if product.video_review_author_url %}</a>{% endif %}
-          {% endif %}
-        </strong>
-        {{ product.video_review_html|safe }}
+      {% if product.description %}
+        <div class="desc">{{ product.description|safe }}</div>
+      {% endif %}
+      <div class="amazon">
+        <a href="{{ product.details_url }}">View on Amazon.com &raquo;</a>
       </div>
-    {% endif %}
-    {% if product.has_reviews %}
-      <div class="reviews">
-        <iframe src="{{ product.reviews_url }}" frameborder="0" width="100%" height="161" scrolling="no" seamless></iframe>
-      </div>
-    {% endif %}
+      {% if not product.out_of_stock %}
+        {% if product.formated_variation_dimensions %}
+          <div class="dimensions">{{ product.formated_variation_dimensions }}</div>
+        {% endif %}
+        {% set btn_size = 'default' %}
+        {% set btn_text_long = True %}
+        {% set btn_colorize = True %}
+        {% include "store/buy_buttons.html" %}
+      {% endif %}
+      {% if product.video_review_url %}
+        <div class="video">
+          <strong>
+            Video review
+            {% if product.video_review_author %}
+              by {% if product.video_review_author_url %}<a href="{{ product.video_review_author_url }}">{% endif %}
+              {{ product.video_review_author }}{% if product.video_review_author_url %}</a>{% endif %}
+            {% endif %}
+          </strong>
+          {{ product.video_review_html|safe }}
+        </div>
+      {% endif %}
+      {% if product.has_reviews %}
+        <div class="reviews">
+          <iframe src="{{ product.reviews_url }}" frameborder="0" width="100%" height="161" scrolling="no" seamless></iframe>
+        </div>
+      {% endif %}
+    </div>
   </div>
-</div>
+{% endblock %}

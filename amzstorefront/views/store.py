@@ -1,4 +1,4 @@
-from flask import Blueprint, current_app, render_template, request, g, session, jsonify, abort, redirect
+from flask import Blueprint, current_app, render_template, request, g, session, jsonify, abort, redirect, url_for
 from amzstorefront.models import *
 from amzstorefront.utils import *
 from amzstorefront.amazon import Cart, InvalidCartItem
@@ -30,13 +30,21 @@ def save_cart_after_request(response):
         session['cart_id'] = g.cart.id
         session['cart_hmac'] = g.cart.hmac
         session['cart_assoc_tag'] = g.cart.assoc_tag
-        g.cart.persist()
+        g.cart.persist(current_app.config['CART_TTL'])
     return response
 
 
 @blueprint.route('/')
 def home():
-    return render_template('store/index.html', categories=g.categories)
+    return redirect(url_for('.all_products'))
+    return render_template('store/index.html')
+
+
+@blueprint.route('/all')
+def all_products():
+    products = Product.query.filter_by(parent_id=None).all()
+    return render_template('store/product_list_page.html', list_title='All categories', 
+        products=products)
 
 
 @blueprint.route('/<slug>')
@@ -45,7 +53,8 @@ def show_category(slug):
     if not category:
         return abort(404)
     g.active_category_id = category.id
-    return render_template('store/category_page.html', category=category)
+    return render_template('store/product_list_page.html', list_title=category.name, 
+            list_description=category.description, products=category.products)
 
 
 @blueprint.route('/p/<int:product_id>-<slug>')
@@ -62,7 +71,7 @@ def show_product(product_id, slug):
             session.permanent = True
 
     g.active_category_id = product.category_id
-    return render_template('store/product_page.html', product=product)
+    return render_template('store/product.html', product=product)
 
 
 @blueprint.route('/cart')

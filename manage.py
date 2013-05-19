@@ -54,14 +54,14 @@ def add_product(asin, category_name):
 @manager.command
 def update_product(asin):
     p = Product.query.filter_by(ASIN=asin).one()
-    amazon.update_product(p)
+    amazon.populate_product(p)
     db.session.commit()
 
 
 @manager.command
 def update_all_products():
     for p in Product.query.filter_by(parent_id=None).all():
-        amazon.update_product(p)
+        amazon.populate_product(p)
     db.session.commit()
 
 

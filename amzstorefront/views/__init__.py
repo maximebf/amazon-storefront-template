@@ -22,7 +22,7 @@ register_page('/affiliates', 'pages/affiliates.html')
 
 
 login_manager = login.LoginManager()
-login_manager.login_view = "login"
+login_manager.login_view = "user_login"
 login_manager.setup_app(app)
 
 
